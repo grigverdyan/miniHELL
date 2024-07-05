@@ -19,9 +19,8 @@ HEADERS			= $(wildcard $(HEADERS_DIR)/*.h) $(LIBFT_DIR)/libft.h
 
 SOURCES_DIR		= sources/
 SOURCE_FILES	= main.c \
-				  tokenizer.c
-
-SOURCES			= $(addprefix $(SOURCES_DIR), $(SOURCE_FILES))
+				  tokenizer.c \
+				  debug.c
 
 OBJS_DIR		= objs/
 OBJ_FILES		= $(SOURCE_FILES:.c=.o)

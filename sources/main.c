@@ -1,32 +1,38 @@
-#include "libft.h"
 #include "minishell.h"
-#include "tokenizer.h"
+#include "debug.h"
 
-#include <stdio.h>
-#include <readline/readline.h>
-#include <readline/history.h>
+void	error_message(char *text, int mode)
+{
+	if (mode == 0)
+		perror(text);
+	else if (text)
+		ft_putstr_fd(text, 2);
+	exit(EXIT_FAILURE);
+}
 
 int main(int argc, char **argv, char **envp)
 {
-    t_token *tokens;
-    char *input;
+    t_engine	engine;
+    char		*input;
     (void)argv;
     (void)envp;
 
     if (argc != 1)
+		error_message("Minishell takes no argument! \n", 1);
+
+    while (true)
     {
-        printf("Minishell takes no argument\n");
-        exit(EXIT_FAILURE);
-    }
-    tokens = (t_token *)malloc(sizeof(t_token)); 
-    while (1)
-    {
-        input = readline("Minishell$");
-        if (!input)
-        {
-            //
-        }
-        tokenize(input, tokens);
+		if (isatty(STDIN_FILENO))
+		{
+			input = readline("Minishell$ ");
+			if (!input)
+				error_message("Input error!\n", 1);
+			tokenizer(input, &engine);
+		}
+		else
+			error_message("Minishell is not run in interactive mode!\n", 1);
+
+		debug_print_tokens(&engine.lexer);
     }
     return (0);
 }
