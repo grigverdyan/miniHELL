@@ -24,6 +24,37 @@ void	parse_redirect(t_lexer *lexer, char *input, int *i)
 	}
 }
 
+void	parse_quote(t_lexer *lexer, char *input, int *i)
+{
+	int start;
+
+	*i += 1;
+	start = *i;
+	if (input[*i - 1] == '\'')
+	{
+		add_token(lexer, TOKEN_QUOTE_SINGLE, "\'");
+		while (input[*i] != '\'' && input[*i] != '\0')
+		{
+			*i += 1;
+		}
+		add_token(lexer, TOKEN_WORD, ft_substr(input, start, *i - start));
+		if (input[*i] == '\'')
+			add_token(lexer, TOKEN_QUOTE_SINGLE, "\'");
+	}
+	else if (input[*i - 1] == '\"')
+	{
+		add_token(lexer, TOKEN_QUOTE_SINGLE, "\"");
+		while (input[*i] != '\"' && input[*i] != '\0')
+		{
+			*i += 1;
+		}
+		add_token(lexer, TOKEN_WORD, ft_substr(input, start, *i - start));
+		if (input[*i] == '\"')
+			add_token(lexer, TOKEN_QUOTE_SINGLE, "\"");
+	}
+}
+
+
 void	add_token(t_lexer *lexer, t_token_type type, char *value)
 {
     t_token *token;
@@ -81,16 +112,16 @@ void    tokenizer(char *input, t_engine *e)
             add_token(&e->lexer, TOKEN_PIPE, "|");
         else if (input[i] == '<' || input[i] == '>')
 			parse_redirect(&e->lexer, input, &i);
-        else if (input[i] == '\'')
-            add_token(&e->lexer, TOKEN_QUOTE_SINGLE, "\'");
-        else if (input[i] == '\"')
-            add_token(&e->lexer, TOKEN_QUOTE_DOUBLE, "\"");
+        else if (input[i] == '\'' || input[i] == '\"')
+			parse_quote(&e->lexer, input, &i);
+        //     add_token(&e->lexer, TOKEN_QUOTE_SINGLE, "\'");
+        // else if (input[i] == '\"')
+        //     add_token(&e->lexer, TOKEN_QUOTE_DOUBLE, "\"");
 		else if (input[i] == '?')
 			add_token(&e->lexer, TOKEN_QUESTION_MARK, "?");
         else if (input[i] == '$')
 			add_token(&e->lexer, TOKEN_ENV_VAR, "$");
         else if (input[i] == '*')
 			add_token(&e->lexer, TOKEN_WILDCARD, "*");
-
     }
 }

@@ -48,6 +48,7 @@ typedef struct s_engine
 } t_engine;
 
 void	parse_redirect(t_lexer *lexer, char *input, int *i);
+void	parse_quote(t_lexer *lexer, char *input, int *i);
 void	add_token(t_lexer *lexer, t_token_type type, char *value);
 void    tokenizer(char *input, t_engine *e);
 
