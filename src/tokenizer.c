@@ -29,9 +29,9 @@ void	add_token(t_lexer *lexer, t_token_type type, char *value)
     t_token *token;
 
 	token = (t_token *)malloc(sizeof(t_token));
-    if (!token)
-		;
-		//destroy_tokens(lexer, "Failed to allocate memory for token: ", 0);
+    // if (!token)
+	// 	;
+	// destroy_tokens(lexer, "Failed to allocate memory for token: ", 0);
     token->type = type;
     token->next = NULL;
 	if (type != TOKEN_WORD)
@@ -91,6 +91,5 @@ void    tokenizer(char *input, t_engine *e)
 			add_token(&e->lexer, TOKEN_ENV_VAR, "$");
         else if (input[i] == '*')
 			add_token(&e->lexer, TOKEN_WILDCARD, "*");
-
     }
 }
