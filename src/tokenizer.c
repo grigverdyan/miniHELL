@@ -62,7 +62,7 @@ void	add_token(t_lexer *lexer, t_token_type type, char *value)
 	token = (t_token *)malloc(sizeof(t_token));
     // if (!token)
 	// 	;
-	// destroy_tokens(lexer, "Failed to allocate memory for token: ", 0);
+	// 	//destroy_tokens(lexer, "Failed to allocate memory for token: ", 0);
     token->type = type;
     token->next = NULL;
 	if (type != TOKEN_WORD)
