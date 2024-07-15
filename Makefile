@@ -1,8 +1,10 @@
-.PHONY : all clean fclean re
+.PHONY : all clean fclean re debug
 
+# Compiler
 TARGET			= minishell
 CC				= gcc
-CFLAGS			= -Wall -Wextra -Werror -g
+CFLAGS			= -Wall -Wextra -Werror
+CFLAGS_DEBUG    = $(CFLAGS) -g
 
 RM				= rm -rf
 MKDIR			= mkdir -p
@@ -66,3 +68,6 @@ fclean : clean
 	@echo $(RED) "-- Removing Libft and $(TARGET)" $(RESET)
 
 re : fclean all
+
+debug : $(CFLAGS) = $(CFLAGS_DEBUG)
+debug : re

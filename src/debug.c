@@ -24,18 +24,17 @@ char *get_token_type_str(t_token_type type)
 		return "TOKEN_QUOTE_SINGLE";
 	else if (type == TOKEN_QUOTE_DOUBLE)
 		return "TOKEN_QUOTE_DOUBLE";
-	else if (type == TOKEN_QUESTION_MARK)
-		return "TOKEN_QUESTION_MARK";
 	else if (type == TOKEN_WILDCARD)
 		return "TOKEN_WILDCARD";
 	else
 		return "ANKAPUTYUN";
 }
 
-void debug_print_tokens(t_lexer *lexer)
+void debug_print_tokens(t_token_stream *t_stream)
 {
-	t_token *head = lexer->head;
+	t_token *head = t_stream->head;
 
+	printf("\n\n\n");
 	while (head)
 	{
 		char *type_str = get_token_type_str(head->type);
