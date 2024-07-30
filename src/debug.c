@@ -30,9 +30,9 @@ char *get_token_type_str(t_token_type type)
 		return "ANKAPUTYUN";
 }
 
-void debug_print_tokens(t_token_stream *t_stream)
+void debug_print_tokens(t_stream *stream)
 {
-	t_token *head = t_stream->head;
+	t_token *head = stream->head;
 
 	printf("\n\n\n");
 	while (head)

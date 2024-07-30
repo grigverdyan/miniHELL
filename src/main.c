@@ -1,28 +1,15 @@
 #include "minishell.h"
 #include "debug.h"
 
-void	error_message(char *text, bool is_errno)
-{
-	if (is_errno)
-		perror(text);
-	else if (text)
-		ft_putstr_fd(text, 2);
-	exit(EXIT_FAILURE);
-}
-
 int main(int argc, char **argv, char **envp)
 {
-    (void)argv;
-    (void)envp;
-
+	(void)argv;
     t_engine	engine;
     char		*input;
 
     if (argc != 1)
 		error_message("Minishell takes no argument! \n", false);
-
-	engine.t_stream.head = NULL;
-	engine.t_stream.tail = NULL;
+	init_engine(&engine, envp);
     while (true)
     {
 		if (isatty(STDIN_FILENO))
@@ -30,12 +17,16 @@ int main(int argc, char **argv, char **envp)
 			input = readline("Minishell$ ");
 			if (!input)
 				error_message("Input error!\n", false);
-			lexer(input, &engine);
+			lexer(input, &(engine.stream));
+			free(input);
+			parser(&engine);
 		}
 		else
 			error_message("Minishell isn't run in interactive mode!\n", false);
 
-		debug_print_tokens(&engine.t_stream);
+		// *********** Testing *********** //
+		debug_print_tokens(&engine.stream);
+		clear_token_stream(&engine.stream, NULL);
     }
     return (0);
 }

@@ -1,96 +1,96 @@
 #include "minishell.h"
 
-int	add_bool_operator(t_token_stream *t_stream, char *input, int i)
+int	add_bool_operator(t_stream *stream, char *input, int i)
 {
 	if (input[i] == '&')
 	{
 		if (input[i + 1] == '&')
 		{
-			add_token(t_stream, TOKEN_AND, "&&");
+			add_token(stream, TOKEN_AND, "&&");
 			i += 1;
 		}
 		else
-			clear_token_stream(t_stream, 
+			clear_token_stream(stream, 
 				"Minishell: syntax error near unexpected token `&'\n");
 	}
 	else if (input[i] == '|')
 	{
 		if (input[i + 1] == '|')
 		{
-			add_token(t_stream, TOKEN_OR, "||");
+			add_token(stream, TOKEN_OR, "||");
 			++i;
 		}
 		else
-			add_token(t_stream, TOKEN_PIPE, "|");
+			add_token(stream, TOKEN_PIPE, "|");
 	}
 	return i;
 }
 
-int	add_quote(t_token_stream *t_stream, char *input, int i)
+int	add_quote(t_stream *stream, char *input, int i)
 {
 	int start;
 
 	start = ++i;
 	if (input[i - 1] == '\'')
 	{
-		add_token(t_stream, TOKEN_QUOTE_SINGLE, "\'");
+		add_token(stream, TOKEN_QUOTE_SINGLE, "\'");
 		while (input[i] && input[i] != '\'')
 			i += 1;
-		add_token(t_stream, TOKEN_WORD, ft_substr(input, start, i - start));
+		add_token(stream, TOKEN_WORD, ft_substr(input, start, i - start));
 		if (input[i] != '\'')
-			clear_token_stream(t_stream, "Single quote error!\n");
-		add_token(t_stream, TOKEN_QUOTE_SINGLE, "\'");
+			clear_token_stream(stream, "Single quote error!\n");
+		add_token(stream, TOKEN_QUOTE_SINGLE, "\'");
 	}
 	else if (input[i - 1] == '\"')
 	{
-		add_token(t_stream, TOKEN_QUOTE_DOUBLE, "\"");
+		add_token(stream, TOKEN_QUOTE_DOUBLE, "\"");
 		while (input[i] && input[i] != '\"')
 			i += 1;
-		add_token(t_stream, TOKEN_WORD, ft_substr(input, start, i - start));
+		add_token(stream, TOKEN_WORD, ft_substr(input, start, i - start));
 		if (input[i] != '\"')
-			clear_token_stream(t_stream, "Double quote error!\n");
-		add_token(t_stream, TOKEN_QUOTE_DOUBLE, "\"");
+			clear_token_stream(stream, "Double quote error!\n");
+		add_token(stream, TOKEN_QUOTE_DOUBLE, "\"");
 	}
 	return i;
 }
 
-int	add_redirect(t_token_stream *t_stream, char *input, int i)
+int	add_redirect(t_stream *stream, char *input, int i)
 {
 	if (input[i] == '<')
 	{
 		if (input[i + 1] == '<')
 		{
-			add_token(t_stream, TOKEN_HEREDOC, "<<");
+			add_token(stream, TOKEN_HEREDOC, "<<");
 			i += 1;
 		}
 		else
-			add_token(t_stream, TOKEN_REDIRECT_IN, "<");
+			add_token(stream, TOKEN_REDIRECT_IN, "<");
 	}
 	else
 	{
 		if (input[i + 1] == '>')
 		{
-			add_token(t_stream, TOKEN_APPEND, ">>");
+			add_token(stream, TOKEN_APPEND, ">>");
 			i += 1;
 		}
 		else
-			add_token(t_stream, TOKEN_REDIRECT_OUT, ">");
+			add_token(stream, TOKEN_REDIRECT_OUT, ">");
 	}
 	return i;
 }
 
-int	add_env_var(t_token_stream *t_stream, char *input, int i)
+int	add_env_var(t_stream *stream, char *input, int i)
 {
 	int start;
 
 	start = i++;
 	while (input[i] && (ft_isalnum(input[i]) || input[i] == '_'))
 		++i;
-	add_token(t_stream, TOKEN_ENV_VAR, ft_substr(input, start, i - start));
+	add_token(stream, TOKEN_ENV_VAR, ft_substr(input, start, i - start));
 	return i;
 }
 
-void    lexer(char *input, t_engine *e)
+void    lexer(char *input, t_stream *stream)
 {
     int	start;
 	int	i;
@@ -101,21 +101,21 @@ void    lexer(char *input, t_engine *e)
         if (ft_isspace(input[i]))
             continue;
 		if (input[i] == '&' || input[i] == '|')
-			i = add_bool_operator(&e->t_stream, input, i);
+			i = add_bool_operator(stream, input, i);
         else if (input[i] == '<' || input[i] == '>')
-			i = add_redirect(&e->t_stream, input, i);
+			i = add_redirect(stream, input, i);
         else if (input[i] == '\'' || input[i] == '\"')
-			i = add_quote(&e->t_stream, input, i);
+			i = add_quote(stream, input, i);
         else if (input[i] == '$')
-			i = add_env_var(&e->t_stream, input, i);
+			i = add_env_var(stream, input, i);
         else if (input[i] == '*')
-			add_token(&e->t_stream, TOKEN_WILDCARD, "*");
+			add_token(stream, TOKEN_WILDCARD, "*");
 		else // TOKEN_WORD
         {
             start = i;
             while (input[i] && !ft_isspace(input[i]) && !is_token_type(input[i]))
             	++i;
-            add_token(&e->t_stream, TOKEN_WORD, ft_substr(input, start, i - start));
+            add_token(stream, TOKEN_WORD, ft_substr(input, start, i - start));
 			--i;
 		}
     }

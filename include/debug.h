@@ -3,6 +3,6 @@
 
 #include "minishell.h"
 
-void debug_print_tokens(t_token_stream *lexer);
+void debug_print_tokens(t_stream *stream);
 
 #endif  /* DEBUG_H */

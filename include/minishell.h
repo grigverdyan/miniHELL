@@ -30,31 +30,51 @@ typedef struct s_token
     struct s_token	*next;
 }   t_token;
 
-typedef struct s_token_stream
+typedef struct s_stream
 {
     t_token	*head;
 	t_token	*tail;
-}   t_token_stream;
+}   t_stream;
 
 typedef struct s_engine
 {
-	char**          envp;
-	t_token_stream  t_stream ;
+	char**      envp;
+	t_stream    stream;
 }   t_engine;
 
-// main.c
+typedef enum e_node_type
+{
+    OR,
+    AND,
+    PIPE,
+    COMMAND
+}   t_node_type;
+
+typedef struct s_ast_node
+{
+    t_node_type type;
+    char        *cmd;
+    char        *arg;
+    char        *redir_in;
+    char        *redir_out;
+}   t_ast_node;
+
+// utils.c
 void	error_message(char *text, bool is_errno);
+void	init_engine(t_engine *engine, char **envp);
 
 // lexer.c
-int     add_bool_operator(t_token_stream *t_stream, char *input, int i);
-int     add_quote(t_token_stream *t_stream, char *input, int i);
-int     add_redirect(t_token_stream *t_stream, char *input, int i);
-int     add_env_var(t_token_stream *t_stream, char *input, int i);
-void    lexer(char *input, t_engine *e);
+int     add_bool_operator(t_stream *stream, char *input, int i);
+int     add_quote(t_stream *stream, char *input, int i);
+int     add_redirect(t_stream *stream, char *input, int i);
+int     add_env_var(t_stream *stream, char *input, int i);
+void    lexer(char *input, t_stream *stream);
 
 // lexer_utils.c
 bool	is_token_type(char c);
-void    add_token(t_token_stream *t_stream, t_token_type type, char *value);
-void    clear_token_stream(t_token_stream *t_stream, char *text);
+void    add_token(t_stream *stream, t_token_type type, char *value);
+void    clear_token_stream(t_stream *stream, char *text);
+
+
 
 #endif  /* MINISHELL_H */

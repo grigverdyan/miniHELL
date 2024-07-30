@@ -6,13 +6,13 @@ bool	is_token_type(char c)
 		c == '\'' || c == '\"' || c == '$' || c == '*');
 }
 
-void	add_token(t_token_stream *t_stream, t_token_type type, char *value)
+void	add_token(t_stream *stream, t_token_type type, char *value)
 {
     t_token *token;
 
 	token = (t_token *)malloc(sizeof(t_token));
     if (!token)
-		clear_token_stream(t_stream, "Failed to allocate memory for token!\n");
+		clear_token_stream(stream, "Failed to allocate memory for token!\n");
     token->type = type;
     token->next = NULL;
 	if (type != TOKEN_WORD)
@@ -22,24 +22,24 @@ void	add_token(t_token_stream *t_stream, t_token_type type, char *value)
     if (!token->value)
     {
         free(token);
-		clear_token_stream(t_stream, "Failed to set token value!\n");
+		clear_token_stream(stream, "Failed to set token value!\n");
     }
-    if (!t_stream->tail)
-        t_stream->head = token;
+    if (!stream->tail)
+        stream->head = token;
 	else
-		t_stream->tail->next = token;
-	t_stream->tail = token;
+		stream->tail->next = token;
+	stream->tail = token;
 }
 
-void    clear_token_stream(t_token_stream *t_stream, char *text)
+void    clear_token_stream(t_stream *stream, char *text)
 {
     t_token *head;
     t_token *tmp;
 
-    if (!t_stream)
+    if (!stream)
         return;
 
-    head = t_stream->head;
+    head = stream->head;
     while (head)
     {
         tmp = head->next;
@@ -47,8 +47,8 @@ void    clear_token_stream(t_token_stream *t_stream, char *text)
         free(head);
         head = tmp;
     }
-    t_stream->head = NULL;
-    t_stream->tail = NULL;
+    stream->head = NULL;
+    stream->tail = NULL;
     if (text)
         error_message(text, false);
 }
