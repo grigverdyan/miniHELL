@@ -2,8 +2,7 @@
 
 bool	is_token_type(char c)
 {
-	return (c == '&' || c == '|' || c == '<' || c == '>' ||
-		c == '\'' || c == '\"' || c == '$' || c == '*');
+	return (c == '&' || c == '|' || c == '<' || c == '>');
 }
 
 void	add_token(t_stream *stream, t_token_type type, char *value)

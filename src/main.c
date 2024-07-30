@@ -19,7 +19,7 @@ int main(int argc, char **argv, char **envp)
 				error_message("Input error!\n", false);
 			lexer(input, &(engine.stream));
 			free(input);
-			parser(&engine);
+			// parser(&engine);
 		}
 		else
 			error_message("Minishell isn't run in interactive mode!\n", false);

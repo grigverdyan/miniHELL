@@ -30,26 +30,28 @@ int	add_quote(t_stream *stream, char *input, int i)
 {
 	int start;
 
-	start = ++i;
-	if (input[i - 1] == '\'')
+	start = i;
+	if (input[i] == '\'')
 	{
-		add_token(stream, TOKEN_QUOTE_SINGLE, "\'");
+		// add_token(stream, TOKEN_QUOTE_SINGLE, "\'");
+		++i;
 		while (input[i] && input[i] != '\'')
 			i += 1;
-		add_token(stream, TOKEN_WORD, ft_substr(input, start, i - start));
+		add_token(stream, TOKEN_WORD, ft_substr(input, start, i - start + 1));
 		if (input[i] != '\'')
 			clear_token_stream(stream, "Single quote error!\n");
-		add_token(stream, TOKEN_QUOTE_SINGLE, "\'");
+		// add_token(stream, TOKEN_QUOTE_SINGLE, "\'");
 	}
-	else if (input[i - 1] == '\"')
+	else if (input[i] == '\"')
 	{
-		add_token(stream, TOKEN_QUOTE_DOUBLE, "\"");
+		// add_token(stream, TOKEN_QUOTE_DOUBLE, "\"");
+		++i;
 		while (input[i] && input[i] != '\"')
 			i += 1;
-		add_token(stream, TOKEN_WORD, ft_substr(input, start, i - start));
+		add_token(stream, TOKEN_WORD, ft_substr(input, start, i - start + 1));
 		if (input[i] != '\"')
 			clear_token_stream(stream, "Double quote error!\n");
-		add_token(stream, TOKEN_QUOTE_DOUBLE, "\"");
+		// add_token(stream, TOKEN_QUOTE_DOUBLE, "\"");
 	}
 	return i;
 }
@@ -108,8 +110,6 @@ void    lexer(char *input, t_stream *stream)
 			i = add_quote(stream, input, i);
         else if (input[i] == '$')
 			i = add_env_var(stream, input, i);
-        else if (input[i] == '*')
-			add_token(stream, TOKEN_WILDCARD, "*");
 		else // TOKEN_WORD
         {
             start = i;
@@ -118,5 +118,8 @@ void    lexer(char *input, t_stream *stream)
             add_token(stream, TOKEN_WORD, ft_substr(input, start, i - start));
 			--i;
 		}
+        // else if (input[i] == '*')
+		// 	add_token(stream, TOKEN_WILDCARD, "*");
+
     }
 }

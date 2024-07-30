@@ -20,14 +20,15 @@ char *get_token_type_str(t_token_type type)
 		return "TOKEN_AND";
 	else if (type == TOKEN_OR)
 		return "TOKEN_OR";
-	else if (type == TOKEN_QUOTE_SINGLE)
-		return "TOKEN_QUOTE_SINGLE";
-	else if (type == TOKEN_QUOTE_DOUBLE)
-		return "TOKEN_QUOTE_DOUBLE";
-	else if (type == TOKEN_WILDCARD)
-		return "TOKEN_WILDCARD";
 	else
 		return "ANKAPUTYUN";
+	// else if (type == TOKEN_QUOTE_SINGLE)
+	// 	return "TOKEN_QUOTE_SINGLE";
+	// else if (type == TOKEN_QUOTE_DOUBLE)
+	// 	return "TOKEN_QUOTE_DOUBLE";
+	// else if (type == TOKEN_WILDCARD)
+	// 	return "TOKEN_WILDCARD";
+
 }
 
 void debug_print_tokens(t_stream *stream)

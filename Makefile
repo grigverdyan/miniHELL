@@ -3,7 +3,7 @@
 # Compiler
 TARGET			= minishell
 CC				= gcc
-CFLAGS			= -Wall -Wextra -Werror
+CFLAGS			= -Wall -Wextra -Werror -g
 CFLAGS_DEBUG    = $(CFLAGS) -g
 
 RM				= rm -rf
@@ -69,5 +69,6 @@ fclean : clean
 
 re : fclean all
 
+# Not working
 debug : $(CFLAGS) = $(CFLAGS_DEBUG)
 debug : re
